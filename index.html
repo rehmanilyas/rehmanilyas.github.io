@@ -1,8 +1,91 @@
 <html>
 	<head>
-		<title>Test</title>
+		<meta name="viewport" content= "width=device-width, initial-scale=1.0"> 
+		<title>Rehman Ilyas</title>
+		<script src="js/phaser-arcade-physics.min.js"></script>
+		<style>
+			* { margin:0; padding: 0;}
+			.overlay { position:absolute; top: 0; color:#fff; font-size:20px; width:100%; text-align:center; padding:20px;}
+		</style>
 	</head>
+	
+	
 	<body>
-		Test site
+		<div class="overlay">
+			Experimental site
+		</div>
+		<div id="font-loader" style="position:absolute; left:-1000px; visibility:hidden;">.</div>
+		<div id="winner" style="position:absolute; left:-1000px; visibility:hidden;">.</div>
+
+		<script>
+		
+		var winHeight = window.innerHeight;
+		var winWidth = window.innerWidth;
+		
+		var config = {
+			type: Phaser.AUTO,
+			width: winWidth,
+			height: winHeight,
+			scene: {
+				preload: preload,
+				create: create,
+				update: update
+			}
+		};
+
+		var game = new Phaser.Game(config);
+		
+		var emitter;
+
+		function preload ()
+		{
+			this.load.image('particle', 'images/fire.png');
+		}
+
+		function create ()
+		{
+			var particles = this.add.particles('particle');
+			
+			emitter = particles.createEmitter({
+				//speed: {min: 10, max: 100},
+				quantity: 1,
+				scale: { start: 0.3, end: 1.5},
+				blendMode: 'ADD',
+				tint:[0xFF3300, 0X333333],
+				lifespan:{min:1200, max:2000},
+				alpha:{start:1, end:0}
+				//emitZone:{
+				//	source:new Phaser.Geom.Rectangle(0, 0, winWidth, 10),
+				//}
+			});
+			
+			//emitter.setGravity(0, -100);
+			//emitter.setSpeedX(500);
+			//emitter.setPosition(0, winHeight/2);
+			emitter.startFollow(this.input.mousePointer);
+		}
+		
+		var xPos = 0;
+		
+		function update(time, delta) {
+			/*
+			emitter.setPosition(xPos, winHeight/2);
+			xPos += 10;
+			xPos %= winWidth;
+			*/
+			
+			emitter.setAngle(Math.random() * 90);
+			emitter.setSpeedX((Math.random() * 100));
+			emitter.setSpeedY(-10 - (Math.random() * 300));
+		}
+		
+		function onObjectClicked(pointer,gameObject) {
+			if (typeof music.duration != 'undefined') {
+				music.play();
+			}
+			phase = "start";
+		}
+		
+		</script>
 	</body>
 </html>
