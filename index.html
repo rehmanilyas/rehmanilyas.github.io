@@ -21,6 +21,9 @@
 		
 		var winHeight = window.innerHeight;
 		var winWidth = window.innerWidth;
+
+		var targetX = winWidth/2;
+		var targetY = winHeight/2;
 		
 		var config = {
 			type: Phaser.AUTO,
@@ -40,6 +43,7 @@
 		function preload ()
 		{
 			this.load.image('particle', 'images/fire.png');
+			this.load.image('particle2', 'images/fire.png');
 		}
 
 		function create ()
@@ -49,10 +53,10 @@
 			emitter = particles.createEmitter({
 				//speed: {min: 10, max: 100},
 				quantity: 1,
-				scale: { start: 0.3, end: 1.5},
+				scale: { start: 0.2, end: 2},
 				blendMode: 'ADD',
 				tint:[0xFF3300, 0X333333],
-				lifespan:{min:1200, max:2000},
+				lifespan:{min:400, max:900},
 				alpha:{start:1, end:0}
 				//emitZone:{
 				//	source:new Phaser.Geom.Rectangle(0, 0, winWidth, 10),
@@ -61,22 +65,56 @@
 			
 			//emitter.setGravity(0, -100);
 			//emitter.setSpeedX(500);
-			//emitter.setPosition(0, winHeight/2);
-			emitter.startFollow(this.input.mousePointer);
+			emitter.setPosition(winWidth/2, winHeight/2);
+			//emitter.startFollow(this.input.mousePointer);
+
+			var particles2 = this.add.particles('particle2');
+			
+			emitter2= particles2.createEmitter({
+				//speed: {min: 10, max: 100},
+				quantity: 1,
+				scale: { start: 0.2, end: 2},
+				blendMode: 'ADD',
+				tint:[0xFF00CC, 0X0088FF],
+				lifespan:{min:400, max:900},
+				alpha:{start:1, end:0}
+				//emitZone:{
+				//	source:new Phaser.Geom.Rectangle(0, 0, winWidth, 10),
+				//}
+			});
+
+			emitter2.startFollow(this.input.mousePointer);
 		}
 		
-		var xPos = 0;
+
 		
 		function update(time, delta) {
-			/*
-			emitter.setPosition(xPos, winHeight/2);
-			xPos += 10;
-			xPos %= winWidth;
-			*/
 			
+			emitter.setPosition(targetX, targetY);
+			
+			xMove = (targetX - this.input.mousePointer.x) / 10;
+			yMove = (targetY - this.input.mousePointer.y) / 10;
+
+			// if (xMove > 10) xMove = 10;
+			// else if (xMove < -10) xMove = -10;
+			// if (yMove > 10) yMove = 10;
+			// else if (yMove < -10) yMove = -10;
+
+			targetX -= xMove;
+			targetY -= yMove;
+
+			absX = Math.abs(xMove);
+			absY = Math.abs(yMove);
+
+			qty = (absX > absY ? absX : absY) / 10;
+			if (qty < 0.01) qty = 0;
+			//else if (qty > 1) qty = 1;
+			emitter.setQuantity(qty);
+			
+			//console.log(this.input.mousePointer);
 			emitter.setAngle(Math.random() * 90);
 			emitter.setSpeedX((Math.random() * 100));
-			emitter.setSpeedY(-10 - (Math.random() * 300));
+			emitter.setSpeedY(-10 - (Math.random() * 100));
 		}
 		
 		function onObjectClicked(pointer,gameObject) {
