@@ -587,3 +587,9 @@ section{ position:relative; z-index:1; }
 .social-row{ display:flex; gap:20px; }
 .social-row a{ color:var(--text-dim); transition:color .2s; }
 .social-row a:hover{ color:var(--accent); }
+#modalShot iframe {
+    width: 100%;
+    aspect-ratio: 16 / 9;
+    border: 0;
+    display: block;
+}

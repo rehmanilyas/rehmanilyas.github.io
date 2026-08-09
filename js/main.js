@@ -68,9 +68,7 @@ const GAMES = [
     accent: "#c6ff3c",
     desc: "Untangle the chains in this challenging game to clear each level. A puzzle game that tests your logic and spatial reasoning.",
     screenshots: [
-      { src: 'https://play-lh.googleusercontent.com/WxEigqybcgsdZQylPqLjwK3TVaxQZnvt0Ol3E_r1MObmZfu_G2B3kmzCmZciCX7_d3BpUUGpPziyNO9Hio_B0iw=w2560-h1440-rw' },
-      { src: 'https://play-lh.googleusercontent.com/pn5ZIP4zSTLKGGtD8evlUDmEwJ72hKRANOvv9W2llM8tXkBPFu0iLLfIYfXNjZcvzEP4eV73svIkuq2MpuxAvw=w2560-h1440-rw' }, 
-      { src: 'https://play-lh.googleusercontent.com/_RFWuPZeU0LUGIh9xJS3AODXNv9rSKxpBVkM53qYODfgjgKikjDobMe5ea9wYh_XbJJ16S9DHe-hcCIe5ESmoA=w2560-h1440-rw' }
+      { src: 'https://www.youtube.com/watch?v=lO4pJDJvmKs' },
     ],
     link:'https://play.google.com/store/apps/details?id=com.sylphbox.arrowchains&referrer=utm_source%3Dweb%26utm_medium%3Dgithub%26utm_campaign%3Dportfolio'
   },
@@ -272,19 +270,87 @@ function openModal(gameIndex) {
   bsModal.show();
 }
 
+function getYouTubeEmbedUrl(src) {
+    try {
+        const url = new URL(src);
+
+        // youtube.com/watch?v=VIDEO_ID
+        if (url.hostname === 'www.youtube.com' || url.hostname === 'youtube.com') {
+            if (url.pathname === '/watch') {
+                const videoId = url.searchParams.get('v');
+                return videoId
+                    ? `https://www.youtube.com/embed/${videoId}`
+                    : null;
+            }
+
+            // youtube.com/shorts/VIDEO_ID
+            if (url.pathname.startsWith('/shorts/')) {
+                const videoId = url.pathname.split('/')[2];
+                return videoId
+                    ? `https://www.youtube.com/embed/${videoId}`
+                    : null;
+            }
+
+            // youtube.com/embed/VIDEO_ID
+            if (url.pathname.startsWith('/embed/')) {
+                return src;
+            }
+        }
+
+        // youtu.be/VIDEO_ID
+        if (url.hostname === 'youtu.be') {
+            const videoId = url.pathname.substring(1);
+            return videoId
+                ? `https://www.youtube.com/embed/${videoId}`
+                : null;
+        }
+
+    } catch (e) {
+        // Invalid URL — treat it as an image URL
+    }
+
+    return null;
+}
+
 function renderShot() {
-  const shot = activeGame.screenshots[activeIndex];
-  if (shot && shot.src) {
-    modalShot.innerHTML = `<img src="${shot.src}" alt="${activeGame.title} screenshot ${activeIndex + 1}">`;
-  } else {
-    modalShot.innerHTML = `
-      <div class="placeholder">
-        <div class="grid-lines"></div>
-        ${ICONS[activeGame.icon]}
-        <span>${activeGame.title} — screenshot ${activeIndex + 1} of ${activeGame.screenshots.length}</span>
-      </div>`;
-  }
-  [...modalDots.children].forEach((d, i) => d.classList.toggle('active', i === activeIndex));
+    const shot = activeGame.screenshots[activeIndex];
+
+    if (shot && shot.src) {
+        const youtubeUrl = getYouTubeEmbedUrl(shot.src);
+
+        if (youtubeUrl) {
+            modalShot.innerHTML = `
+                <iframe 
+                  src="${youtubeUrl}" 
+                  title="${activeGame.title}  
+                  frameborder="0" 
+                  allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" 
+                  referrerpolicy="strict-origin-when-cross-origin" 
+                  allowfullscreen>
+                </iframe>
+            `;
+        } else {
+            modalShot.innerHTML = `
+                <img
+                    src="${shot.src}"
+                    alt="${activeGame.title} screenshot ${activeIndex + 1}">
+            `;
+        }
+    } else {
+        modalShot.innerHTML = `
+            <div class="placeholder">
+                <div class="grid-lines"></div>
+                ${ICONS[activeGame.icon]}
+                <span>
+                    ${activeGame.title} — screenshot ${activeIndex + 1} of ${activeGame.screenshots.length}
+                </span>
+            </div>
+        `;
+    }
+
+    [...modalDots.children].forEach((d, i) =>
+        d.classList.toggle('active', i === activeIndex)
+    );
 }
 
 function stepShot(dir) {
