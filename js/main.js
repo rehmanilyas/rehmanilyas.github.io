@@ -56,6 +56,25 @@ const GAMES = [
     link:'https://tinygames.sylphbox.com/'
   },
   {
+    title: "Arrow Chains",
+    img:'https://img.youtube.com/vi/lO4pJDJvmKs/sddefault.jpg',
+    type: "personal",
+    genre: "Puzzle",
+    engine: "Unity",
+    platform: "iOS / Android",
+    role: "Solo Developer",
+    year: "2026",
+    icon: "cube",
+    accent: "#c6ff3c",
+    desc: "Untangle the chains in this challenging game to clear each level. A puzzle game that tests your logic and spatial reasoning.",
+    screenshots: [
+      { src: 'https://play-lh.googleusercontent.com/WxEigqybcgsdZQylPqLjwK3TVaxQZnvt0Ol3E_r1MObmZfu_G2B3kmzCmZciCX7_d3BpUUGpPziyNO9Hio_B0iw=w2560-h1440-rw' },
+      { src: 'https://play-lh.googleusercontent.com/pn5ZIP4zSTLKGGtD8evlUDmEwJ72hKRANOvv9W2llM8tXkBPFu0iLLfIYfXNjZcvzEP4eV73svIkuq2MpuxAvw=w2560-h1440-rw' }, 
+      { src: 'https://play-lh.googleusercontent.com/_RFWuPZeU0LUGIh9xJS3AODXNv9rSKxpBVkM53qYODfgjgKikjDobMe5ea9wYh_XbJJ16S9DHe-hcCIe5ESmoA=w2560-h1440-rw' }
+    ],
+    link:'https://play.google.com/store/apps/details?id=com.sylphbox.arrowchains&referrer=utm_source%3Dweb%26utm_medium%3Dgithub%26utm_campaign%3Dportfolio'
+  },
+  {
     title: "The Perfect Choice",
     img:'https://gamedva.com/wp-content/uploads/2023/08/The-Perfect-Choice-mod-free.jpg',
     type: "client",
